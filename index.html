@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>MoodBoard - Home</title>
+</head>
+<body>
+    <section>
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2>Latest Mood Posts</h2>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex justify-content-end">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="moodFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span th:if="${filterActive}" th:text="${currentMood}">Filter by Mood</span>
+                            <span th:unless="${filterActive}">Filter by Mood</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="moodFilterDropdown">
+                            <li><a class="dropdown-item" th:href="@{/}">All Moods</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Happy')}">Happy</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Sad')}">Sad</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Excited')}">Excited</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Relaxed')}">Relaxed</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Energetic')}">Energetic</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Tired')}">Tired</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Inspired')}">Inspired</a></li>
+                            <li><a class="dropdown-item" th:href="@{/(mood='Grateful')}">Grateful</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- No posts message -->
+        <div class="alert alert-info" th:if="${#lists.isEmpty(posts)}">
+            <p class="mb-0">No mood posts found. Be the first to <a th:href="@{/create}" class="alert-link">create a mood post</a>!</p>
+        </div>
+        
+        <!-- Mood Posts Grid -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" th:each="post : ${posts}">
+                <div class="card h-100 shadow-sm">
+                    <div class="position-relative">
+                        <img th:src="${post.imageUrl}" class="card-img-top" alt="Mood Image" style="height: 200px; object-fit: cover;">
+                        <span class="position-absolute top-0 end-0 badge rounded-pill bg-primary m-2" th:text="${post.mood}">Mood</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" th:text="${post.caption}">Caption goes here</p>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <a th:href="@{/profile/{username}(username=${post.username})}" class="text-decoration-none">
+                                <i class="fas fa-user me-1"></i> <span th:text="${post.username}">Username</span>
+                            </a>
+                        </small>
+                        <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy')}">Date</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html> 

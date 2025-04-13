@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Create Mood Post</title>
+</head>
+<body>
+    <section>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title mb-0">Create a New Mood Post</h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/posts/create}" method="post" th:object="${moodPost}">
+                            <!-- Mood Selection -->
+                            <div class="mb-3">
+                                <label for="mood" class="form-label">How are you feeling?</label>
+                                <select class="form-select" id="mood" th:field="*{mood}" required>
+                                    <option value="" selected disabled>Select your mood</option>
+                                    <option th:each="moodOption : ${moods}" th:value="${moodOption}" th:text="${moodOption}">Mood</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Caption -->
+                            <div class="mb-3">
+                                <label for="caption" class="form-label">Caption</label>
+                                <textarea class="form-control" id="caption" rows="3" th:field="*{caption}" placeholder="What's on your mind?" required></textarea>
+                            </div>
+                            
+                            <!-- Image URL (In a real app, this would be a file upload) -->
+                            <div class="mb-3">
+                                <label for="imageUrl" class="form-label">Image URL</label>
+                                <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" placeholder="Enter image URL">
+                                <div class="form-text">Leave blank to use a default image for your selected mood</div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Share Your Mood</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html> 

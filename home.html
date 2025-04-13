@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodBoard - Share Your Mood</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">MoodBoard</div>
+            <div class="nav-links">
+                <a href="/" class="active">Home</a>
+                <a href="/profile">Profile</a>
+                <button id="createPostBtn" class="btn-primary">Create Post</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <section class="mood-filters">
+            <h2>Filter by Mood</h2>
+            <div class="mood-buttons">
+                <a th:href="@{/(mood='Happy')}" class="mood-btn happy">Happy</a>
+                <a th:href="@{/(mood='Sad')}" class="mood-btn sad">Sad</a>
+                <a th:href="@{/(mood='Excited')}" class="mood-btn excited">Excited</a>
+                <a th:href="@{/(mood='Calm')}" class="mood-btn calm">Calm</a>
+                <a th:href="@{/}" class="mood-btn all">All</a>
+            </div>
+        </section>
+
+        <section class="mood-posts">
+            <div class="posts-grid">
+                <div th:each="post : ${moodPosts}" class="post-card">
+                    <img th:src="${post.imageUrl}" th:alt="${post.mood + ' mood image'}" class="post-image">
+                    <div class="post-content">
+                        <span th:text="${post.mood}" class="mood-tag"></span>
+                        <p th:text="${post.description}" class="post-description"></p>
+                        <a th:href="@{/profile(username=${post.username})}" class="post-author" th:text="${post.username}"></a>
+                        <span th:text="${#temporals.format(post.timestamp, 'dd MMM yyyy')}" class="post-date"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create New Mood Post</h2>
+            <form th:action="@{/posts/create}" method="post">
+                <div class="form-group">
+                    <label for="mood">Mood:</label>
+                    <select id="mood" name="mood" required>
+                        <option value="Happy">Happy</option>
+                        <option value="Sad">Sad</option>
+                        <option value="Excited">Excited</option>
+                        <option value="Calm">Calm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="imageUrl">Image URL:</label>
+                    <input type="text" id="imageUrl" name="imageUrl" placeholder="Optional: Enter image URL">
+                </div>
+                <button type="submit" class="btn-primary">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html> 
